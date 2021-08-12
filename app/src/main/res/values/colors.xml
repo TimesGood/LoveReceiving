@@ -9,5 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#00CCFF</color>
     <color name="red">#EE113D</color>
-    <color name="background">#E6E6E6</color>
+    <color name="background">#EEEEEE</color>
+    <color name="grey">#E6E6E6</color>
+    <color name="azure">#30B4FF</color>
 </resources>

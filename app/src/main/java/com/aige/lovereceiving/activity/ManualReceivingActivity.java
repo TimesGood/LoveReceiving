@@ -1,15 +1,15 @@
 package com.aige.lovereceiving.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,7 +46,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class ManualReceivingActivity extends AppCompatActivity {
+public class ManualReceivingActivity extends AppCompatActivity{
     //导航栏
     private RelativeLayout title_bar,loading_layout;
     private TextView tv_main_title;
@@ -70,9 +70,9 @@ public class ManualReceivingActivity extends AppCompatActivity {
     private void initUI() {
         manual_receiving_list = findViewById(R.id.manual_receiving_list);
         title_bar = findViewById(R.id.title_bar);
-        title_bar.setBackgroundColor(Color.parseColor("#30B4FF"));
+        title_bar.setBackground(getDrawable(R.color.blue));
         tv_back = findViewById(R.id.tv_back);
-        tv_back.setBackground(getResources().getDrawable(R.drawable.blue_ripple));
+        tv_back.setBackground(getDrawable(R.drawable.ripple_button_blue));
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +103,9 @@ public class ManualReceivingActivity extends AppCompatActivity {
         scan_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //收起软键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(scan_edit.getWindowToken(), 0);
                 //防止频繁操作
                 if (prelongTim==0){//第一次单击时间
                     prelongTim=(new Date()).getTime();
@@ -115,34 +118,11 @@ public class ManualReceivingActivity extends AppCompatActivity {
                     }
                     prelongTim=curTime;
                 }
+                String orderpre = scan_edit.getText().toString();
                 new Thread() {
                     @Override
                     public void run() {
-                        String orderpre = scan_edit.getText()+"";
-                        if(orderpre == "") {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(ManualReceivingActivity.this,"请输入销售单号",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }else if(orderpre.length() != 11) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MyDialog.setDialog(ManualReceivingActivity.this,"请输入正确的销售单号","");
-                                }
-                            });
-                        }else if(orderpre.substring(0,3).equals(AnalysisUtils.getValue(ManualReceivingActivity.this,"loginInfo","orderpre"))) {
-                            setList(orderpre,"1");
-                        }else{
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MyDialog.setDialog(ManualReceivingActivity.this,"销售单号错误","");
-                                }
-                            });
-                        }
+                        scan(orderpre);
                     }
                 }.start();
             }
@@ -206,86 +186,16 @@ public class ManualReceivingActivity extends AppCompatActivity {
                     new Thread() {
                         @Override
                         public void run() {
-                            //判断是销售单号还是包装码
-                            if(result.length() == 11) {
-                                setList(result,"0");
-                            }else{
-                                if("".equals(AnalysisUtils.getValue(ManualReceivingActivity.this,"loginInfo","SalesOrderId"))){
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
-                                            MyDialog.setDialog(ManualReceivingActivity.this,"请扫描销售单号","");
-                                        }
-                                    });
-                                }else if(!result.substring(0,11).equals(AnalysisUtils.getValue(ManualReceivingActivity.this,"loginInfo","SalesOrderId"))){
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
-                                            MyDialog.setDialog(ManualReceivingActivity.this,"该包装码不是当前扫描列表","");
-                                        }
-                                    });
-                                }else {
-                                    String userName = AnalysisUtils.getValue(ManualReceivingActivity.this, "loginInfo", "userName");
-                                    String salesOrderId = AnalysisUtils.getValue(ManualReceivingActivity.this, "loginInfo", "salesOrderId");
-                                    List<ScanCodeBean> scanCodeBeans = ServiceUtil.scanPackage(userName, result,salesOrderId);
-                                    Iterator<ScanCodeBean> iterator = scanCodeBeans.iterator();
-                                    while (iterator.hasNext()) {
-                                        ScanCodeBean next = iterator.next();
-                                        if("0".equals(next.getStatuss())) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
-                                                    MyDialog.setDialog(ManualReceivingActivity.this, "此单已扫，请勿重复扫描", "");
-                                                }
-                                            });
-                                        }else if("1".equals(next.getStatuss())) {
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
-                                                    MyDialog.setDialog(ManualReceivingActivity.this,"扫描超时","请检查网络");
-                                                }
-                                            });
-                                        }else if("2".equals(next.getStatuss())){
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
-                                                    MyDialog.setDialog(ManualReceivingActivity.this,"未知错误","请联系管理员");
-                                                }
-                                            });
-                                        }else if("3".equals(next.getStatuss())){
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
-                                                    MyDialog.setDialog(ManualReceivingActivity.this,"包装码异常","请检查包装码");
-                                                }
-                                            });
-                                        }else {
-                                            new Thread() {
-                                                @Override
-                                                public void run() {
-                                                    setList(next.getPackageCode().substring(0,11),"0");
-                                                }
-                                            }.start();
-                                        }
-                                    }
-                                }
-
-                            }
+                            scan(result);
 
                         }
                     }.start();
-
                 }
             }
         }
 
     }
+
     //通过销售单号获取所有收货列表
     private void setList(String salesOrderId,String scanType) {
         //加载动画
@@ -357,9 +267,84 @@ public class ManualReceivingActivity extends AppCompatActivity {
             BeeAndVibrateManagerUtil.playTone(ManualReceivingActivity.this,R.raw.ok);
         }
     }
+    //扫描
+    private void scan(String result) {
+        //判断是销售单号还是包装码
+        if(result.length() == 11) {
+            setList(result,"0");
+        }else{
+            String userName = AnalysisUtils.getValue(ManualReceivingActivity.this, "loginInfo", "userName");
+            String salesOrderId = AnalysisUtils.getValue(ManualReceivingActivity.this, "loginInfo", "SalesOrderId");
+            if("".equals(salesOrderId)){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
+                        Toast.makeText(ManualReceivingActivity.this,"请扫描销售单号",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }else if(!result.substring(0,11).equals(salesOrderId)){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
+                        MyDialog.setDialog(ManualReceivingActivity.this,"该包装码不在当前扫描列表","请先扫描该包装码对应的销售单号");
+                    }
+                });
+            }else {
+                List<ScanCodeBean> scanCodeBeans = ServiceUtil.scanPackage(userName, result,salesOrderId);
+                Iterator<ScanCodeBean> iterator = scanCodeBeans.iterator();
+                while (iterator.hasNext()) {
+                    ScanCodeBean next = iterator.next();
+                    String value = AnalysisUtils.getValue(ManualReceivingActivity.this, "loginInfo", "SalesOrderId");
+                    if("off".equals(next.getStatuss())) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
+                                Toast.makeText(ManualReceivingActivity.this,"此单已扫，请勿重复扫描！",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        setList(value,"0");
+                    }else if("1".equals(next.getStatuss())) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
+                                Toast.makeText(ManualReceivingActivity.this,"扫描超时，请检查网络连接",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else if("2".equals(next.getStatuss())){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
+                                MyDialog.setDialog(ManualReceivingActivity.this,"扫描失败","未知错误，请联系管理员");
+                            }
+                        });
+                    }else if("3".equals(next.getStatuss())){
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.no);
+                                Toast.makeText(ManualReceivingActivity.this,"扫描失败，包装码异常，请检查包装码",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                BeeAndVibrateManagerUtil.playShakeAndTone(ManualReceivingActivity.this,1000,R.raw.ok);
+                                Toast.makeText(ManualReceivingActivity.this,"扫描成功",Toast.LENGTH_SHORT).show();
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+                            }
+                        });
+                        setList(value,"0");
+                    }
+                }
+            }
+
+        }
     }
+
 }

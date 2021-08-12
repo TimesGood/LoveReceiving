@@ -1,25 +1,18 @@
 package com.aige.lovereceiving.adapter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aige.lovereceiving.R;
-import com.aige.lovereceiving.activity.ManualReceivingActivity;
-import com.aige.lovereceiving.activity.ScanReceivingActivity;
 import com.aige.lovereceiving.bean.ReceivingBean;
 import com.aige.lovereceiving.bean.ScanCodeBean;
 import com.aige.lovereceiving.mydailog.MyDialog;
@@ -28,7 +21,6 @@ import com.aige.lovereceiving.util.BeeAndVibrateManagerUtil;
 import com.aige.lovereceiving.util.ServiceUtil;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +28,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 
 public class ReceivingAdapter extends BaseAdapter {
     private Context context;
@@ -101,7 +92,7 @@ public class ReceivingAdapter extends BaseAdapter {
                 Button button = new Button(context);
                 button.setText(bean.getScanStatus());
                 button.setTextColor(Color.parseColor("#ffffff"));
-                button.setBackground(convertView.getResources().getDrawable(R.drawable.yellow_ripple));
+                button.setBackground(convertView.getResources().getDrawable(R.drawable.ripple_button_yellow));
                 //点击收货事件
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -93,6 +93,13 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 LoginActivity.this.finish();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(LoginActivity.this,"登录成功！",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
                             }else if("登录失败,该用户不是经销商".equals(next.getUsername())) {
                                 runOnUiThread(new Runnable() {
                                     @Override

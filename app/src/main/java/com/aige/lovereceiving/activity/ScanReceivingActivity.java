@@ -1,15 +1,15 @@
 package com.aige.lovereceiving.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AbsListView;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -70,9 +70,9 @@ public class ScanReceivingActivity extends AppCompatActivity {
     private void initUI() {
         manual_receiving_list = findViewById(R.id.manual_receiving_list);
         title_bar = findViewById(R.id.title_bar);
-        title_bar.setBackgroundColor(Color.parseColor("#30B4FF"));
+        title_bar.setBackground(getDrawable(R.color.blue));
         tv_back = findViewById(R.id.tv_back);
-        tv_back.setBackground(getResources().getDrawable(R.drawable.blue_ripple));
+        tv_back.setBackground(getDrawable(R.drawable.ripple_button_blue));
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +103,9 @@ public class ScanReceivingActivity extends AppCompatActivity {
         scan_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //收起软键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(scan_edit.getWindowToken(), 0);
                 //防止频繁操作
                 if (prelongTim==0){//第一次单击时间
                     prelongTim=(new Date()).getTime();
@@ -275,7 +278,7 @@ public class ScanReceivingActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         BeeAndVibrateManagerUtil.playShakeAndTone(ScanReceivingActivity.this,1000,R.raw.no);
-                        Toast.makeText(ScanReceivingActivity.this,"请先扫描销售单号",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ScanReceivingActivity.this,"请扫描销售单号",Toast.LENGTH_SHORT).show();
                     }
                 });
             }else if(!result.substring(0,11).equals(salesOrderId)){

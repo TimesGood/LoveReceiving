@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:paddingBottom="10dp"
     android:orientation="vertical"
-    android:background="#000">
+    android:background="@color/black">
     <TextView
         android:id="@+id/title"
         android:text="提示标题"
@@ -31,29 +31,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_marginTop="15dp"
-        android:layout_height="37dp">
+        android:layout_height="37dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/left_btn"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="取消"
             android:background="@drawable/dialog_btn"
             android:textColor="@color/white"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"/>
 
-        <View
-            android:layout_width="20dp"
-            android:layout_height="match_parent"
-            />
+
         <Button
             android:id="@+id/right_btn"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="确定"
             android:textColor="@color/white"
             android:background="@drawable/dialog_btn"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"/>
 
     </LinearLayout>
 

@@ -30,16 +30,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //导航栏
     private RelativeLayout title_bar;
     private TextView tv_main_title;
-    //中间内容
-    private LinearLayout main_body;
     //底部组件
     private LinearLayout bottom_LLayout,tv_back;
     private RelativeLayout home_RLayout,user_RLayout;
     private TextView home_text,user_text;
     private ImageView home_image,user_image;
-    //View界面对象
-    private HomeView homeView;
-    private UserView userView;
     private View home_bottom_view,user_bottom_view;
     private ViewPager vpager_four;
     private ArrayList<View> listViews;
@@ -67,12 +62,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bottom_LLayout.getChildAt(i).setOnClickListener(this);
         }
         //初始界面状态
-        title_bar.setBackgroundColor(Color.parseColor("#30B4FF"));
+        title_bar.setBackground(getDrawable(R.color.blue));
         tv_back.setVisibility(View.GONE);
         tv_main_title.setText("首页");
         home_text.setTextColor(Color.parseColor("#30B4FF"));
         home_bottom_view.setBackgroundColor(Color.parseColor("#30B4FF"));
-        home_image.setImageDrawable(getResources().getDrawable((R.drawable.home_image_on)));
+        home_image.setImageDrawable(getDrawable((R.drawable.home_image_on)));
         //载入页面
         HomeView homeView = new HomeView(this);
         UserView userView = new UserView(this);

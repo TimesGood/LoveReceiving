@@ -7,78 +7,65 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/text_shape_result">
+        android:background="@drawable/layer_list_while_shape">
         <ImageView
             android:id="@+id/image_user"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:layout_centerVertical="true"
             android:src="@drawable/user_photo" />
-        <LinearLayout
-            android:id="@+id/user_title"
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="vertical"
-            android:layout_toRightOf="@+id/image_user">
-            <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/image_user"
+            android:columnCount="2"
+            android:layout_centerVertical="true">
+            <TextView
+                android:id="@+id/textUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <TextView
-                    android:id="@+id/textUser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="用户名："
-                    android:textSize="16sp"
-                    android:paddingRight="2dp"
-                    android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/textUser_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black"
-                    android:layout_toRightOf="@+id/textUser"/>
-            </RelativeLayout>
-            <RelativeLayout
+                android:text="用户名："
+                android:textSize="16sp"
+                android:paddingRight="2dp"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/textUser_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:paddingRight="10dp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/textUser"/>
+            <TextView
+            android:id="@+id/dealer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="经销店："
+            android:textSize="16sp"
+            android:textColor="#000" />
+            <TextView
+                android:id="@+id/dealer_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_toRightOf="@+id/dealer"/>
+            <TextView
+                android:id="@+id/orderId_prefix"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <TextView
-                    android:id="@+id/dealer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="经销店："
-                    android:textSize="16sp"
-                    android:textColor="#000" />
-                <TextView
-                    android:id="@+id/dealer_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="#000"
-                    android:layout_toRightOf="@+id/dealer"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="wrap_content"
+                android:text="订单前缀："
+                android:textSize="16sp"
+                android:textColor="#000"/>
+            <TextView
+                android:id="@+id/orderId_prefix_text"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-                <TextView
-                    android:id="@+id/orderId_prefix"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="订单前缀："
-                    android:textSize="16sp"
-                    android:textColor="#000"/>
-                <TextView
-                    android:id="@+id/orderId_prefix_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:textColor="#000"
-                    android:layout_toRightOf="@+id/orderId_prefix"/>
-            </RelativeLayout>
-        </LinearLayout>
+                android:textSize="16sp"
+                android:textColor="#000"
+                android:layout_toRightOf="@+id/orderId_prefix"/>
+        </GridLayout>
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/user_list_LLayout"
@@ -90,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/button_ripple_result">
+            android:background="@drawable/ripple_button_while_shape">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/button_ripple_result">
+            android:background="@drawable/ripple_button_while_shape">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
