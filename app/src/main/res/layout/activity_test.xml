@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.TestActivity"
+    android:background="#fff">
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/test_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+    </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/loading_view_progressbar"
+        style="@style/loadingViewProgressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/loading_view_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loading_view_progressbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text="正在加载..."
+        android:textColor="#999999"
+        android:textSize="12sp" />
+    <ListView
+        android:id="@+id/listview_test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>
