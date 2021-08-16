@@ -78,7 +78,6 @@ public class ReceivingAdapter extends BaseAdapter {
             convertView = (View) mHashMap.get(position);
             vh = (ViewHolder) convertView.getTag();
         }
-
         //获取列
         final ReceivingBean bean = getItem(position);
         //设置该列的值

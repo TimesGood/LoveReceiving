@@ -45,6 +45,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ManualReceivingActivity extends AppCompatActivity{
     //导航栏
@@ -61,6 +64,8 @@ public class ManualReceivingActivity extends AppCompatActivity{
     //限制按钮点击间隔
     private long prelongTim = 0;
     private long curTime = 0;
+    //线程
+    ExecutorService service;
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +104,7 @@ public class ManualReceivingActivity extends AppCompatActivity{
                 return true;
             }
         });
+        service = Executors.newCachedThreadPool();
         scan_btn = findViewById(R.id.scan_btn);
         scan_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,12 +125,12 @@ public class ManualReceivingActivity extends AppCompatActivity{
                     prelongTim=curTime;
                 }
                 String orderpre = scan_edit.getText().toString();
-                new Thread() {
+                service.execute(new Runnable() {
                     @Override
                     public void run() {
                         scan(orderpre);
                     }
-                }.start();
+                });
             }
         });
         //清除扫描的记录
@@ -183,13 +189,13 @@ public class ManualReceivingActivity extends AppCompatActivity{
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     //获取到扫描的结果
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    new Thread() {
+                    service.execute(new Runnable() {
                         @Override
                         public void run() {
                             scan(result);
 
                         }
-                    }.start();
+                    });
                 }
             }
         }
@@ -271,7 +277,7 @@ public class ManualReceivingActivity extends AppCompatActivity{
     private void scan(String result) {
         //判断是销售单号还是包装码
         if(result.length() == 11) {
-            setList(result,"0");
+            setList(result,"1");
         }else{
             String userName = AnalysisUtils.getValue(ManualReceivingActivity.this, "loginInfo", "userName");
             String salesOrderId = AnalysisUtils.getValue(ManualReceivingActivity.this, "loginInfo", "SalesOrderId");
@@ -305,7 +311,7 @@ public class ManualReceivingActivity extends AppCompatActivity{
                                 Toast.makeText(ManualReceivingActivity.this,"此单已扫，请勿重复扫描！",Toast.LENGTH_SHORT).show();
                             }
                         });
-                        setList(value,"0");
+                        setList(value,"1");
                     }else if("1".equals(next.getStatuss())) {
                         runOnUiThread(new Runnable() {
                             @Override
@@ -339,12 +345,36 @@ public class ManualReceivingActivity extends AppCompatActivity{
 
                             }
                         });
-                        setList(value,"0");
+                        setList(value,"1");
                     }
                 }
             }
-
         }
+    }
+    //查看列表是否有正在收货的订单
+    private boolean getListStatus() {
+        boolean flag = true;
+        if(list != null) {
+            Iterator<ReceivingBean> iterator = list.iterator();
+            while(iterator.hasNext()) {
+                if("收货中...".equals(iterator.next().getScanStatus())) {
+                    flag = false;
+                    return flag;
+                }
+            }
+        }
+        return flag;
+    }
+    //按下返回键
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            ManualReceivingActivity.this.finish();
+        }
+        return false;
+
     }
 
 }

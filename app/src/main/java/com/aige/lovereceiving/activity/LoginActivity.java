@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                         JSONObject jsonObject = JSONObject.parseObject(text);
                         if("true".equals(jsonObject.getString("ret"))) {
                             List<UserBean> userList = new ArrayList<>();
-                            JsonUtil.getJsonSingleValue(jsonObject,"data","",userList, UserBean.class);
+                            JsonUtil.getJsonObjectValue(jsonObject,"data","",userList, UserBean.class);
                             UserBean next = userList.iterator().next();
                             String username = next.getUsername();
                             if (null != username) {

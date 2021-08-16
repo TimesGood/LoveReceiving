@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
-        android:background="@drawable/layer_list_while_shape">
+        android:background="@drawable/shape_while_grey_stroke">
         <TextView
             android:id="@+id/orderId_title"
             android:layout_width="match_parent"

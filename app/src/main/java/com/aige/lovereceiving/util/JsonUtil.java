@@ -21,7 +21,7 @@ public class JsonUtil {
      * @param jsonList  返回指定层级的List集合
      * @param domain    json映射对象，自己创建一个对应节点字段的domain
      */
-    public static void getJsonSingleValue(JSONObject json, String attrs, String condition, List<?> jsonList, Class domain) {
+    public static void getJsonObjectValue(JSONObject json, String attrs, String condition, List<?> jsonList, Class domain) {
         JSONObject jsonObject = null;
         int index1 = attrs.indexOf('.');
         if(json == null) {
@@ -40,7 +40,7 @@ public class JsonUtil {
             String s2 = attrs.substring(index1 + 1);
             jsonObject = json.getJSONObject(s1);
             if (!(null == jsonObject)) {
-                getJsonSingleValue(jsonObject, s2, "", jsonList, domain);
+                getJsonObjectValue(jsonObject, s2, "", jsonList, domain);
             }
         }
         return;
@@ -54,7 +54,7 @@ public class JsonUtil {
      * @param jsonList 返回指定层级的List集合
      * @param domain json映射对象，自己创建一个对应节点字段的domain
      */
-    public static void getJsonNodeValue(JSONObject json, String attrs,String condition,List<?> jsonList,Class domain) {
+    public static void getJsonArrayValue(JSONObject json, String attrs,String condition,List<?> jsonList,Class domain) {
         JSONArray jsonArray = null;
         int index1 = attrs.indexOf('.');
         if(json == null) {
@@ -84,12 +84,12 @@ public class JsonUtil {
                         String c2 = condition.substring(index2+1);
                         String subStr = jsonObject.getString(c1) == null?"":jsonObject.getString(c1);
                         if(subStr.contains(c2)) {
-                            getJsonNodeValue(jsonObject,s2,"",jsonList,domain);
+                            getJsonArrayValue(jsonObject,s2,"",jsonList,domain);
                         }else {
                             continue;
                         }
                     }else {
-                        getJsonNodeValue(jsonObject,s2,"",jsonList,domain);
+                        getJsonArrayValue(jsonObject,s2,"",jsonList,domain);
                     }
                 }
             }

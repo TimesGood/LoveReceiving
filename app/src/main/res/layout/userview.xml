@@ -76,8 +76,8 @@
             android:id="@+id/logout"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/ripple_button_while_shape">
+            android:layout_marginTop="2dp"
+            android:background="@drawable/ripple_button_white_stroke">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,11 +94,12 @@
                 android:src="@drawable/right_arrow"/>
         </RelativeLayout>
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/layout_text"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/ripple_button_while_shape">
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/ripple_button_white_stroke">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

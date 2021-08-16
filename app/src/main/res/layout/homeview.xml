@@ -75,6 +75,5 @@
                 android:textSize="12sp"
                 android:layout_gravity="center"/>
         </LinearLayout>
-
     </GridLayout>
 </LinearLayout>

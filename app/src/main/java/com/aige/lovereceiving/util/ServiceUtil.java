@@ -2,6 +2,8 @@ package com.aige.lovereceiving.util;
 
 import com.aige.lovereceiving.api.AigeApi;
 import com.aige.lovereceiving.bean.PackageBean;
+import com.aige.lovereceiving.bean.PlanNoReceivingBean;
+import com.aige.lovereceiving.bean.PlanNoScanBean;
 import com.aige.lovereceiving.bean.ScanCodeBean;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -58,7 +60,7 @@ public class ServiceUtil {
             String get = AigeApi.Get(head+"/api/Orders/GetOrderPackageBySalesOrderId", map);
             JSONObject jsonObject = JSON.parseObject(get);
             if("true".equals(jsonObject.get("ret")+"")) {
-                JsonUtil.getJsonNodeValue(jsonObject,"data","",list,PackageBean.class);
+                JsonUtil.getJsonArrayValue(jsonObject,"data","",list,PackageBean.class);
             }else{
                 bean = new PackageBean();
                 bean.setStatus("0");
@@ -128,6 +130,52 @@ public class ServiceUtil {
             bean.setStatuss("2");
             list.add(bean);
             return list;
+        }
+        return list;
+    }
+    //批次扫描获取包装列表
+    public static List<PlanNoScanBean> getPlanNoScan(String batchNo) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("BatchNo",batchNo);
+        Map<String, Object> network_get = AigeApi.getRequest("http://192.168.10.75:8093/api/Receiving/GetOrderPackageListByBatchNo", map, "NETWORK_GET");
+        int responseCode = (int) network_get.get("responseCode");
+        List<PlanNoScanBean> list = new ArrayList<>();
+        PlanNoScanBean bean = new PlanNoScanBean();
+        if(responseCode==200) {
+            byte[] responseBody = (byte[]) network_get.get("responseBody");
+            try {
+                String body = new String(responseBody,"UTF-8");
+                JSONObject jsonObject = JSONObject.parseObject(body);
+                JsonUtil.getJsonArrayValue(jsonObject,"data","",list, PlanNoScanBean.class);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }else{
+            bean.setResponseCode(responseCode);
+            list.add(bean);
+        }
+        return list;
+    }
+    //批次扫描包装结果
+    public static List<PlanNoReceivingBean> getPlanNoScanReceiving(String packageCode) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("PackageCode",packageCode);
+        Map<String, Object> network_get = AigeApi.getRequest("http://192.168.10.75:8093/api/Receiving/ScanCodeReceivingByPackageCode", map, "NETWORK_GET");
+        int responseCode = (int) network_get.get("responseCode");
+        List<PlanNoReceivingBean> list = new ArrayList<>();
+        PlanNoReceivingBean bean = new PlanNoReceivingBean();
+        if(200 == responseCode) {
+            byte[] responseBody = (byte[]) network_get.get("responseBody");
+            try {
+                String body = new String(responseBody,"UTF-8");
+                JSONObject jsonObject = JSONObject.parseObject(body);
+                JsonUtil.getJsonObjectValue(jsonObject,"","",list, PlanNoReceivingBean.class);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }else {
+            bean.setResponseCode(responseCode);
+            list.add(bean);
         }
         return list;
     }
